@@ -1,20 +1,39 @@
 <template>
   <div>
+    <div class="col-md-12">
+      <p> All Stories made or having line added by you will be here </p>
+      </div>
+    <div class="loader" v-if="!$store.state.mystory_data.length"> <img src="~/assets/loading.gif"> </div>
     <div class="row" v-if="$store.state.mystory_data.length">
-      <div class="col-md-3" v-for="(data,index) in $store.state.mystory_data" :key="index">
+      <div class="col-md-4" v-for="(data,index) in $store.state.mystory_data" :key="index">
         <b-card :header="data.title">
-          <blockquote class="blockquote mb-0">
-            <span v-for="(line,index) in data.lines" :key="index">{{line.line}} </span>
-            <footer class="blockquote-footer">
-              <b-button  @click="showModal(data.title,data.hash)" size="sm" variant="warning">
-                Write Line
-                </b-button>
-
-                <b-button  @click="vote(data.hash)" size="sm" variant="success">
-                Upvote {{data.votes.length}}
-                </b-button>
+          <div class="buttons_comment">
+            <b-button v-if="data.lines.length <= 5" @click="showModal(data.title,data.hash)" size="sm" variant="warning">
+              Write Line
+            </b-button>
+  
+            <b-button class="like_button" @click="vote(data.hash)" size="sm" variant="success"> <i class="fas fa-heart"></i> {{data.votes.length}}
+            </b-button>
+            <!-- <hr v-if="data.lines.length <= 5"> -->
+          </div>
+  
+          <div class="cursive">
+            <p :class="{para1:index == 0,para2:index ==1,para3:index ==2,para4:index ==3,para5:index ==4,para6:index ==5}" v-for="(line,index) in data.lines" :key="index">{{line.line}} </p>
+            <footer v-if="data.lines.length">
+  
+              <hr>
+              <p class="contributors"> Contributors - </p>
+              <span :class="{para1:index == 0,para2:index ==1,para3:index ==2,para4:index ==3,para5:index ==4,para6:index ==5}" v-for="(line,index) in data.lines" :key="index" class="from"> {{index+1}}) {{line.from}},   </span>
+  
+  
             </footer>
-          </blockquote>
+          </div>
+  
+  
+  
+  
+  
+  
         </b-card>
       </div>
   
@@ -42,47 +61,65 @@
 
 
 <script>
-export default {
-  mounted() {
-    this.$store.dispatch("mystory_call");
-  },
-  methods: {
-    vote(hash) {
-      this.$store.dispatch("vote", hash);
+  import * as NebPay from "nebpay.js";
+  
+  export default {
+    updated() {
+      //alert(this.count);
+      // if(this.count == 1){
+      //   // alert("called");
+      //   // this.$store.dispatch("call");
+      //   // this.count = 0;
+      // }
     },
-    showModal(title, hash) {
-      // alert(hash);
-      this.line_data.title = title;
-      this.line_data.hash = hash;
-      this.line_data.name = "";
-      this.$refs.myModalRef.show();
+    mounted() {
+      this.$store.dispatch("mystory_call");
     },
-    hideModal() {
-      if (this.nameState) {
-        //alert(JSON.stringify(this.line_data));
-        var temp_data = this.line_data;
-
-        this.$store.dispatch("add_line", temp_data);
-
-        this.$refs.myModalRef.hide();
+    methods: {
+      get() {
+        alert(this.count);
+        // var pq = this;
+        // //setTimeout(function(){
+        //   pq.$store.dispatch("get_call",pq.count);
+        // //},5000);
+      },
+      vote(hash) {
+        this.$store.dispatch("vote", hash);
+      },
+      showModal(title, hash) {
+        // alert(hash);
+        this.line_data.title = title;
+        this.line_data.hash = hash;
+        this.line_data.name = "";
+        this.$refs.myModalRef.show();
+      },
+      hideModal() {
+        if (this.nameState) {
+          //alert("resolved");
+          //alert(JSON.stringify(this.line_data));
+          var temp_data = this.line_data;
+          var vm = this;
+          this.$store.dispatch("add_line", temp_data);
+          this.$refs.myModalRef.hide();
+        }
       }
-    }
-  },
-  computed: {
-    nameState() {
-      return this.line_data.name.length > 2 && this.line_data.name.length < 50
-        ? true
-        : false;
-    }
-  },
-  data() {
-    return {
-      line_data: {
-        name: "",
-        title: "",
-        hash: ""
+    },
+    computed: {
+      nameState() {
+        return this.line_data.name.length > 5 && this.line_data.name.length < 50 ?
+          true :
+          false;
       }
-    };
-  }
-};
+    },
+    data() {
+      return {
+        line_data: {
+          name: "",
+          title: "",
+          hash: ""
+        },
+        count: 0
+      };
+    }
+  };
 </script>

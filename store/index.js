@@ -2,7 +2,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import { contractAddress, nebPay, result } from './neb_init';
+import { contractAddress, nebPay, result,NebPay } from './neb_init';
 
 Vue.use(Vuex)
 
@@ -11,8 +11,10 @@ Vue.use(Vuex)
 const state = {
     count: 5,
     all_data: [],
-    favourite_data:[],
-    mystory_data:[]
+    favourite_data: [],
+    mystory_data: [],
+    color_codes:["#CDDC39","#C2185B","#5D4037","#E64A19","#9E9E9E","#607D8B","#1976D2","#00796B"],
+    extension:true
 }
 
 // mutations are operations that actually mutates the state.
@@ -39,14 +41,15 @@ const mutations = {
 // asynchronous operations.
 const actions = {
     increment: ({ commit }) => commit('increment'),
-    call: ({ commit }) => {
+    call: (store) => {
         var args = "[]";
         nebPay.simulateCall(contractAddress, 0, "get_stories", args, {
             listener: function (data) {
                 // commit(all_data,)
-                if (JSON.parse(data.result) != null) {
+                // alert(data.result);
+                if (data.result != null) {
                     // alert(data.result);
-                    commit("all_data", JSON.parse(JSON.parse(data.result)));
+                    store.commit("all_data", JSON.parse(JSON.parse(data.result)));
                 }
 
             }
@@ -56,20 +59,30 @@ const actions = {
         // alert(payload);
         var args = "[\"" + payload + "\"]";
         nebPay.call(contractAddress, 0, "save_story", args, {
-            listener: result
+            listener: function(data){
+                
+            }
         });
 
     },
     add_line: ({ commit }, payload) => {
-        var payload_temp = payload.name;
-        var hash = payload.hash;
-        var args = "[\"" + payload_temp + "\",\"" + hash + "\"]";
-        nebPay.call(contractAddress, 0, "add_line", args, {
-            listener: result
-        });
+
+       // return new Promise((resolve, reject) => {
+            var payload_temp = payload.name;
+            var hash = payload.hash;
+            var args = "[\"" + payload_temp + "\",\"" + hash + "\"]";
+            nebPay.call(contractAddress, 0, "add_line", args, {
+                callbackUrl: NebPay.config.testnetUrl,
+                listener: function (data) {
+                   // alert(JSON.stringify(data));
+                    //resolve();
+                }
+            });
+       // });
+
     },
     vote: ({ commit }, payload) => {
-        
+
         var args = "[\"" + payload + "\"]";
         nebPay.call(contractAddress, 0, "vote", args, {
             listener: result
@@ -81,7 +94,7 @@ const actions = {
         nebPay.simulateCall(contractAddress, 0, "favourite", args, {
             listener: function (data) {
                 // commit(all_data,)
-                if (JSON.parse(data.result) != null) {
+                if (data.result != null) {
                     // alert(data.result);
                     commit("favourite_data", JSON.parse(JSON.parse(data.result)));
                 }
@@ -94,7 +107,7 @@ const actions = {
         nebPay.simulateCall(contractAddress, 0, "my_stories", args, {
             listener: function (data) {
                 // commit(all_data,)
-                if (JSON.parse(data.result) != null) {
+                if (data.result != null) {
                     // alert(data.result);
                     commit("mystory_data", JSON.parse(JSON.parse(data.result)));
                 }

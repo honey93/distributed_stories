@@ -2,27 +2,19 @@ import * as NebPay from 'nebpay.js';
 
 
 
-if (typeof (webExtensionWallet) == "undefined") {
 
 
-    if (window.confirm('You dont have the Chrome web wallet extension installed to use this Dapp click Confirm to download now ')) {
-        window.location.href = 'https://github.com/ChengOrangeJu/WebExtensionWallet';
-    }
-
-} else {
-    console.log("It is present");
-}
-
-var contractAddress = "n1waoq86MqxQTo9s4LbpND5Tu8fkpEiTfXJ";
+var contractAddress = "n21zVEDh5joptWx8QNbCMSSUM2VhYwjfsUk";
 
 
 var nebPay = new NebPay();
 
-var result = function (data) {
+var result = function () {
+    //resolve();
     //alert(JSON.stringify(data));
-    dispatch("call");
+   // dispatch("call");
 }
 
 
 
-export { contractAddress, nebPay, result };
+export { contractAddress, nebPay, result,NebPay };
