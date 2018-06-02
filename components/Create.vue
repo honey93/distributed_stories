@@ -42,7 +42,7 @@
                 if (this.story_data.name.trim() != "") {
     
                     var cm = this;
-    
+                        cm.submit_flag = true;
                     this.$store.state.all_data.map(function(data) {
                         if (data.title.toLowerCase() == cm.story_data.name.trim().toLowerCase()) {
                             cm.submit_flag = false;

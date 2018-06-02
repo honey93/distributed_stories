@@ -2,7 +2,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import { contractAddress, nebPay, result,NebPay } from './neb_init';
+import { contractAddress, nebPay, result, NebPay } from './neb_init';
 
 Vue.use(Vuex)
 
@@ -13,8 +13,11 @@ const state = {
     all_data: [],
     favourite_data: [],
     mystory_data: [],
-    color_codes:["#CDDC39","#C2185B","#5D4037","#E64A19","#9E9E9E","#607D8B","#1976D2","#00796B"],
-    extension:true
+    color_codes: ["#CDDC39", "#C2185B", "#5D4037", "#E64A19", "#9E9E9E", "#607D8B", "#1976D2", "#00796B"],
+    extension: true,
+    nodata_flag:false,
+    nodata_flag_my:false
+
 }
 
 // mutations are operations that actually mutates the state.
@@ -30,10 +33,12 @@ const mutations = {
         state.all_data = payload;
     },
     favourite_data(state, payload) {
-        state.favourite_data = payload;
+        state.favourite_data = payload.result;
+        state.nodata_flag = payload.status;
     },
     mystory_data(state, payload) {
-        state.mystory_data = payload;
+        state.mystory_data = payload.result;
+        state.nodata_flag_my = payload.status;
     }
 }
 
@@ -59,26 +64,26 @@ const actions = {
         // alert(payload);
         var args = "[\"" + payload + "\"]";
         nebPay.call(contractAddress, 0, "save_story", args, {
-            listener: function(data){
-                
+            listener: function (data) {
+
             }
         });
 
     },
     add_line: ({ commit }, payload) => {
 
-       // return new Promise((resolve, reject) => {
-            var payload_temp = payload.name;
-            var hash = payload.hash;
-            var args = "[\"" + payload_temp + "\",\"" + hash + "\"]";
-            nebPay.call(contractAddress, 0, "add_line", args, {
-                callbackUrl: NebPay.config.testnetUrl,
-                listener: function (data) {
-                   // alert(JSON.stringify(data));
-                    //resolve();
-                }
-            });
-       // });
+        // return new Promise((resolve, reject) => {
+        var payload_temp = payload.name;
+        var hash = payload.hash;
+        var args = "[\"" + payload_temp + "\",\"" + hash + "\"]";
+        nebPay.call(contractAddress, 0, "add_line", args, {
+            callbackUrl: NebPay.config.testnetUrl,
+            listener: function (data) {
+                // alert(JSON.stringify(data));
+                //resolve();
+            }
+        });
+        // });
 
     },
     vote: ({ commit }, payload) => {
@@ -89,14 +94,24 @@ const actions = {
         });
 
     },
-    favourite_call: ({ commit }) => {
+    favourite_call: ({commit,state}) => {
         var args = "[]";
         nebPay.simulateCall(contractAddress, 0, "favourite", args, {
             listener: function (data) {
                 // commit(all_data,)
-                if (data.result != null) {
+                var result = data.result;
+                result = JSON.parse(result);
+                result = JSON.parse(result);
+                //alert(result.length);
+
+                if (result.length) {
                     // alert(data.result);
-                    commit("favourite_data", JSON.parse(JSON.parse(data.result)));
+                    commit("favourite_data", {"result":result,"status":false});
+                } else {
+                   // store.nodata_flag = true;
+                 //   alert("no alert");
+                   state.nodata_flag = true;
+                 //commit("favourite_data", {"result":result,"status":true});
                 }
 
             }
@@ -107,9 +122,19 @@ const actions = {
         nebPay.simulateCall(contractAddress, 0, "my_stories", args, {
             listener: function (data) {
                 // commit(all_data,)
-                if (data.result != null) {
+                var result = data.result;
+                result = JSON.parse(result);
+                result = JSON.parse(result);
+                //alert(result.length);
+
+                if (result.length) {
                     // alert(data.result);
-                    commit("mystory_data", JSON.parse(JSON.parse(data.result)));
+                    commit("mystory_data", {"result":result,"status":false});
+                } else {
+                   // store.nodata_flag = true;
+                 //   alert("no alert");
+                 state.nodata_flag_my = true;
+                 //commit("mystory_data", {"result":result,"status":true});
                 }
 
             }

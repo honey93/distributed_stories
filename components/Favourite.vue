@@ -3,7 +3,11 @@
     <div class="col-md-12">
       <p> All Stories liked by you will be here. </p>
       </div>
-     <div class="loader" v-if="!$store.state.favourite_data.length"> <img src="~/assets/loading.gif"> </div>
+
+      <div class="col-md-12" v-if="$store.state.nodata_flag"> 
+        <h2> No Story liked by you. Go to <nuxt-link to="/"> All Stories </nuxt-link> section and like some and then come back.</h2>
+        </div>
+     <div class="loader" v-if="!$store.state.favourite_data.length && !$store.state.nodata_flag"> <img src="~/assets/loading.gif"> </div>
     <div class="row" v-if="$store.state.favourite_data.length">
       <div class="col-md-4" v-for="(data,index) in $store.state.favourite_data" :key="index">
          <b-card :header="data.title">
@@ -71,6 +75,7 @@ export default {
     // }
   },
   mounted() {
+    this.$store.state.nodata_flag = false;
     this.$store.dispatch("favourite_call");
   },
   methods: {

@@ -22,6 +22,10 @@
         <li class="nav-item">
           <nuxt-link to="/about" class="about">About App </nuxt-link>
         </li>
+
+        <li>
+            <nuxt-link to="/contact" class="about">Contact us </nuxt-link>
+          </li>
       </ul>
   
       <div class="alert alert-danger alert-dismissible" v-if="!$store.state.extension">

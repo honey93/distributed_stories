@@ -3,7 +3,11 @@
     <div class="col-md-12">
       <p> All Stories made or having line added by you will be here </p>
       </div>
-    <div class="loader" v-if="!$store.state.mystory_data.length"> <img src="~/assets/loading.gif"> </div>
+
+       <div class="col-md-12" v-if="$store.state.nodata_flag_my"> 
+        <h2> No Story created or added line by you. Go to <nuxt-link to="/create"> Create Story </nuxt-link> section to create a new story or <nuxt-link to="/"> All Stories </nuxt-link> to add some lines to the existing stories.</h2>
+        </div>
+    <div class="loader" v-if="!$store.state.mystory_data.length && !$store.state.nodata_flag_my"> <img src="~/assets/loading.gif"> </div>
     <div class="row" v-if="$store.state.mystory_data.length">
       <div class="col-md-4" v-for="(data,index) in $store.state.mystory_data" :key="index">
         <b-card :header="data.title">
@@ -73,6 +77,7 @@
       // }
     },
     mounted() {
+      this.$store.state.nodata_flag_my = false;
       this.$store.dispatch("mystory_call");
     },
     methods: {
@@ -123,3 +128,9 @@
     }
   };
 </script>
+
+<style>
+h2{
+  color:green;
+}
+</style>
