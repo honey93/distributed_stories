@@ -17,6 +17,16 @@
                 More than 2 and less than 15 letters
             </b-form-invalid-feedback>
         </div>
+
+         <div class="form-group">
+            <label for="email">Story Image (Optional): </label>
+            <!-- <input v-model="story_data.name" type="text" class="form-control" id="email" placeholder="Title" name="email"> -->
+            <b-form-input id="inputLive" v-model.trim="story_data.image_url" type="text"  placeholder="https://image-url.com"></b-form-input>
+            <b-form-invalid-feedback id="inputLiveFeedback">
+                <!-- This will only be shown if the preceeding input has an invalid state -->
+                More than 2 and less than 15 letters
+            </b-form-invalid-feedback>
+        </div>
         <!-- <div class="form-group">
                                             <label for="pwd">User Name:</label>
                                             <input type="text" class="form-control" id="pwd" placeholder="Name" name="pswd">
@@ -51,7 +61,7 @@
                     });
     
                     if (cm.submit_flag) {
-                        this.$store.dispatch("add_story", this.story_data.name);
+                        this.$store.dispatch("add_story", this.story_data);
                     }else{
                         alert("This Story title already exist");
                     }
@@ -65,7 +75,8 @@
         data() {
             return {
                 story_data: {
-                    name: ""
+                    name: "",
+                    image_url:""
                 },
                 submit_flag: true
             };

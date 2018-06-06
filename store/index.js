@@ -15,8 +15,9 @@ const state = {
     mystory_data: [],
     color_codes: ["#CDDC39", "#C2185B", "#5D4037", "#E64A19", "#9E9E9E", "#607D8B", "#1976D2", "#00796B"],
     extension: true,
-    nodata_flag:false,
-    nodata_flag_my:false
+    nodata_flag: false,
+    nodata_flag_my: false,
+    account_data: {}
 
 }
 
@@ -30,6 +31,7 @@ const mutations = {
         state.count++
     },
     all_data(state, payload) {
+        //alert(JSON.stringify(payload));
         state.all_data = payload;
     },
     favourite_data(state, payload) {
@@ -39,6 +41,10 @@ const mutations = {
     mystory_data(state, payload) {
         state.mystory_data = payload.result;
         state.nodata_flag_my = payload.status;
+    },
+    account_data(state, payload) {
+        //alert(JSON.stringify(payload));
+        state.account_data = payload;
     }
 }
 
@@ -52,9 +58,10 @@ const actions = {
             listener: function (data) {
                 // commit(all_data,)
                 // alert(data.result);
+                //alert(typeof (JSON.parse(data.result)));
                 if (data.result != null) {
                     // alert(data.result);
-                    store.commit("all_data", JSON.parse(JSON.parse(data.result)));
+                    store.commit("all_data", JSON.parse(data.result));
                 }
 
             }
@@ -62,7 +69,7 @@ const actions = {
     },
     add_story: ({ commit }, payload) => {
         // alert(payload);
-        var args = "[\"" + payload + "\"]";
+        var args = "[\"" + payload.name + "\",\"" + payload.image_url + "\"]";
         nebPay.call(contractAddress, 0, "save_story", args, {
             listener: function (data) {
 
@@ -75,7 +82,9 @@ const actions = {
         // return new Promise((resolve, reject) => {
         var payload_temp = payload.name;
         var hash = payload.hash;
-        var args = "[\"" + payload_temp + "\",\"" + hash + "\"]";
+        var address = payload.address;
+        // alert(JSON.stringify(payload));
+        var args = "[\"" + payload_temp + "\",\"" + address + "\",\"" + hash + "\"]";
         nebPay.call(contractAddress, 0, "add_line", args, {
             callbackUrl: NebPay.config.testnetUrl,
             listener: function (data) {
@@ -88,30 +97,27 @@ const actions = {
     },
     vote: ({ commit }, payload) => {
 
-        var args = "[\"" + payload + "\"]";
+        var args = "[\"" + payload.hash + "\",\"" + payload.address + "\"]";
         nebPay.call(contractAddress, 0, "vote", args, {
             listener: result
         });
 
     },
-    favourite_call: ({commit,state}) => {
+    favourite_call: ({ commit, state }) => {
         var args = "[]";
         nebPay.simulateCall(contractAddress, 0, "favourite", args, {
             listener: function (data) {
                 // commit(all_data,)
-                var result = data.result;
-                result = JSON.parse(result);
-                result = JSON.parse(result);
-                //alert(result.length);
+                var result = JSON.parse(data.result);
 
                 if (result.length) {
                     // alert(data.result);
-                    commit("favourite_data", {"result":result,"status":false});
+                    commit("favourite_data", { "result": result, "status": false });
                 } else {
-                   // store.nodata_flag = true;
-                 //   alert("no alert");
-                   state.nodata_flag = true;
-                 //commit("favourite_data", {"result":result,"status":true});
+                    // store.nodata_flag = true;
+                    //   alert("no alert");
+                    state.nodata_flag = true;
+                    //commit("favourite_data", {"result":result,"status":true});
                 }
 
             }
@@ -119,27 +125,51 @@ const actions = {
     },
     mystory_call: ({ commit }) => {
         var args = "[]";
-        nebPay.simulateCall(contractAddress, 0, "my_stories", args, {
+        nebPay.simulateCall(contractAddress, 0, "my_stories_data", args, {
             listener: function (data) {
                 // commit(all_data,)
-                var result = data.result;
-                result = JSON.parse(result);
-                result = JSON.parse(result);
+                //alert(JSON.stringify(data));
+                var result = JSON.parse(data.result);
                 //alert(result.length);
 
                 if (result.length) {
                     // alert(data.result);
-                    commit("mystory_data", {"result":result,"status":false});
+                    commit("mystory_data", { "result": result, "status": false });
                 } else {
-                   // store.nodata_flag = true;
-                 //   alert("no alert");
-                 state.nodata_flag_my = true;
-                 //commit("mystory_data", {"result":result,"status":true});
+                    // store.nodata_flag = true;
+                    //   alert("no alert");
+                    state.nodata_flag_my = true;
+                    //commit("mystory_data", {"result":result,"status":true});
                 }
 
             }
         });
+    },
+    account_call: ({ commit }) => {
+
+        //alert("came in");
+        var args = "[]";
+        nebPay.simulateCall(contractAddress, 0, "account_data", args, {
+            listener: function (data) {
+                // commit(all_data,)
+               // alert(JSON.stringify(data));
+                var result = JSON.parse(data.result);
+                //alert(result.length);
+
+                //if (result.length) {
+                    // alert(data.result);
+                    commit("account_data", result);
+               // } else {
+                    // store.nodata_flag = true;
+                    //   alert("no alert");
+                   // state.nodata_flag_my = true;
+                    //commit("mystory_data", {"result":result,"status":true});
+               // }
+
+            }
+        });
     }
+
 }
 
 // getters are functions

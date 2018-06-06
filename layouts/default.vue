@@ -94,11 +94,18 @@ html {
   text-align: center;
   margin-top: 50px;
 }
-
+.pcursive{
+  position:relative;
+  width: 100%;
+  max-height: 140px;
+  overflow: hidden;
+}
 .cursive {
-  font-family: "Dancing Script", cursive;
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 22px;
   font-weight: 600;
+ 
 }
 
 .cursive > p {
