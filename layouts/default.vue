@@ -4,15 +4,20 @@
       <Header/>
     </div>
     <nuxt/>
+  <div>
+    <Footer />
+  </div>
   </div>
 </template>
 
 <script>
   import Header from '@/components/Header'
+  import Footer from '@/components/Footer'
   
   export default {
     components: {
-      Header
+      Header,
+      Footer
     }
   
   }
@@ -103,8 +108,8 @@ html {
 .cursive {
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 22px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 400;
  
 }
 
@@ -125,10 +130,21 @@ html {
     Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 18px;
   font-weight: 600;
+  margin-bottom: 0px;
+}
+
+.mar-0{
+  margin-bottom: 0px;
+  padding-top: 10px;
+  margin-bottom: 20px;
 }
 
 .buttons_comment {
   position: relative;
+}
+
+.tweet{
+  margin-left: 10px;
 }
 
 .like_button {
@@ -143,7 +159,16 @@ html {
   color: red;
 }
 .card-header{
-  background-color: #CDDC39;
+  background-color: rgb(159, 127, 180);
+  color: white;
+}
+
+.card{
+  margin-bottom: 40px!important;
+}
+
+.aa{
+  margin-bottom: 0!important;
 }
 
  

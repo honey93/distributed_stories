@@ -4,7 +4,7 @@ import * as NebPay from 'nebpay.js';
 
 
 
-var contractAddress = "n1wJ8PpSkhoKWgg6roRtG8DcHCap4ZhzYxY";
+var contractAddress = "n1pQHv3oR8x7cjSZUjjGiQq1wCeQWWrhPm1";
 
 
 var nebPay = new NebPay();

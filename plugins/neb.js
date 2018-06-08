@@ -1,5 +1,9 @@
 
-// import Vue from 'vue'
+ import Vue from 'vue'
+
+ var SocialSharing = require('vue-social-sharing');
+
+Vue.use(SocialSharing);
 // import * as NebPay from 'nebpay.js';
 
   

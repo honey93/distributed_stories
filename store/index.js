@@ -17,7 +17,8 @@ const state = {
     extension: true,
     nodata_flag: false,
     nodata_flag_my: false,
-    account_data: {}
+    account_data: {},
+    language:{english:true,chinese:false}
 
 }
 
@@ -32,7 +33,7 @@ const mutations = {
     },
     all_data(state, payload) {
         //alert(JSON.stringify(payload));
-        state.all_data = payload;
+        state.all_data = payload.reverse();
     },
     favourite_data(state, payload) {
         state.favourite_data = payload.result;
@@ -152,7 +153,7 @@ const actions = {
         nebPay.simulateCall(contractAddress, 0, "account_data", args, {
             listener: function (data) {
                 // commit(all_data,)
-               // alert(JSON.stringify(data));
+                //alert(JSON.stringify(data));
                 var result = JSON.parse(data.result);
                 //alert(result.length);
 
