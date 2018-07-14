@@ -31,8 +31,8 @@
   
             </b-dropdown-divider>
             <nuxt-link to="/mystory">
-             <span v-if="$store.state.language.english">My Stories: </span> <span v-if="$store.state.language.chinese">我的故事： </span>
-            <span>{{$store.state.account_data.count_stories}}</span> </nuxt-link>
+              <span v-if="$store.state.language.english">My Stories: </span> <span v-if="$store.state.language.chinese">我的故事： </span>
+              <span>{{$store.state.account_data.count_stories}}</span> </nuxt-link>
             <b-dropdown-divider></b-dropdown-divider>
             <nuxt-link to="/favourite"> <span v-if="$store.state.language.english">Favourite: </span> <span v-if="$store.state.language.chinese">喜爱：</span> <span> {{$store.state.account_data.count_favourite}} </span>
             </nuxt-link>
@@ -76,12 +76,26 @@
       </ul>
   
       <div class="alert alert-danger alert-dismissible webextension" v-if="!$store.state.extension">
-        
+  
         <strong>!!</strong> You don't have Web Extension installed, which is required to use this DApp. Please refer <span style="color:green"> <nuxt-link to="/about" class="about">About App </nuxt-link> </span>Section
       </div>
   
+      <div> </div>
+  
   
     </div>
+  
+  
+    <b-modal ref="award" hide-footer title="NAS Rewards Program">
+      <div class="d-block text-center">
+        <h3>Highest Voted Story/Poem will get reward of 10 NAS.
+  
+          <br>
+          <br> More Rewards coming soon !! Stay Tuned !!
+        </h3>
+      </div>
+      <b-btn class="mt-3" variant="outline-danger" block @click="closeaward()">Start Writing</b-btn>
+    </b-modal>
   
   
   </div>
@@ -89,102 +103,105 @@
 
 
 <style>
-ul a,
-ul a:hover {
-  margin-right: 25px;
-  color: white;
-}
-
-ul {
-  padding-bottom: 15px;
-  padding-top: 10px;
-}
-
-.header_top {
-  background-color: #00bcd4;
-  margin-bottom: 40px;
-  position: fixed;
-  z-index: 5;
-  padding: 20px 0;
-}
-
-.top_top {
-  padding-bottom: 180px;
-}
-
-.about {
-  color: green !important;
-}
-
-#ddown1 .dropdown-menu.show {
-  width: 400px;
-  max-width: 100vw;
-  border: 1px solid grey;
-}
-
-#ddown1 .address {
-  font-size: 10px;
-}
-
-#ddown1 a {
-  text-decoration: none !important;
-  padding: 20px;
-}
-
-#ddown1 span {
-  padding-left: 15px;
-  color: black;
-}
-
-@media(max-width: 800px){
-  .webextension{
-    display: none;
+  ul a,
+  ul a:hover {
+    margin-right: 25px;
+    color: white;
   }
-
+  
+  ul {
+    padding-bottom: 15px;
+    padding-top: 10px;
+  }
+  
+  .header_top {
+    background-color: #00bcd4;
+    margin-bottom: 40px;
+    position: fixed;
+    z-index: 5;
+    padding: 20px 0;
+  }
+  
   .top_top {
-  padding-bottom: 260px;
-}
-}
+    padding-bottom: 180px;
+  }
+  
+  .about {
+    color: green !important;
+  }
+  
+  #ddown1 .dropdown-menu.show {
+    width: 400px;
+    max-width: 100vw;
+    border: 1px solid grey;
+  }
+  
+  #ddown1 .address {
+    font-size: 10px;
+  }
+  
+  #ddown1 a {
+    text-decoration: none !important;
+    padding: 20px;
+  }
+  
+  #ddown1 span {
+    padding-left: 15px;
+    color: black;
+  }
+  
+  @media (max-width: 800px) {
+    .webextension {
+      display: none;
+    }
+    .top_top {
+      padding-bottom: 260px;
+    }
+  }
 </style>
 
 <script>
-// import * as NebPay from 'nebpay.js';
-export default {
-  mounted() {
-    if (typeof webExtensionWallet === "undefined") {
-      this.$store.state.extension = false;
-    } else {
-      // alert("detected");
-      this.$store.dispatch("account_call");
-
-      this.$store.state.extension = true;
-    }
-  },
-  data() {
-    return {
-      state_language: {
-        english: true,
-        chinese: false
-      },
-      account: "Account Info"
-    };
-  },
-  methods: {
-    changeLanguage(state) {
-      if (state) {
-        this.state_language.english = true;
-        this.state_language.chinese = false;
-        this.$store.state.language.english = true;
-        this.$store.state.language.chinese = false;
-        this.account = "Account Info";
+  // import * as NebPay from 'nebpay.js';
+  export default {
+    mounted() {
+      this.$refs.award.show();
+      if (typeof webExtensionWallet === "undefined") {
+        this.$store.state.extension = false;
       } else {
-        this.state_language.chinese = true;
-        this.state_language.english = false;
-        this.$store.state.language.english = false;
-        this.$store.state.language.chinese = true;
-        this.account = "帐户信息";
+        // alert("detected");
+        this.$store.dispatch("account_call");
+  
+        this.$store.state.extension = true;
+      }
+    },
+    data() {
+      return {
+        state_language: {
+          english: true,
+          chinese: false
+        },
+        account: "Account Info"
+      };
+    },
+    methods: {
+      changeLanguage(state) {
+        if (state) {
+          this.state_language.english = true;
+          this.state_language.chinese = false;
+          this.$store.state.language.english = true;
+          this.$store.state.language.chinese = false;
+          this.account = "Account Info";
+        } else {
+          this.state_language.chinese = true;
+          this.state_language.english = false;
+          this.$store.state.language.english = false;
+          this.$store.state.language.chinese = true;
+          this.account = "帐户信息";
+        }
+      },
+      closeaward() {
+        this.$refs.award.hide();
       }
     }
-  }
-};
+  };
 </script>
