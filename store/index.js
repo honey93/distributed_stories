@@ -121,31 +121,6 @@ const actions = {
           if (respObject.code === 0) {
             console.log("tx result: " + resp);
 
-            //   alert(JSON.stringify(respObject));
-
-            //The transaction is successful 
-            //store.dispatch("call");
-            // clearInterval(intervalQuery) //stop the periodically query 
-
-            //             setTimeout(() => {
-            //   alert(respObject.data.hash);
-            //               var txhash = respObject.data.hash;
-            //    neb.api.getTransactionReceipt(txhash, function (err, respp) {
-            //     alert(JSON.stringify(respp));
-
-            // });
-            //               // neb.api.getTransactionReceipt({
-            //               //     hash: respObject.data.hash
-            //               //   })
-            //               //   .then(function (re) {
-            //               //     alert(JSON.stringify(re));
-            //               //   })
-            //               //   .catch(function (er) {
-            //               //     alert(er);
-            //               //   });
-
-            //             }, 15000);
-
 
           }
           if ((respObject.code === 1)) {
@@ -192,19 +167,19 @@ const actions = {
     var args = "[]";
     nebPay.simulateCall(contractAddress, 0, "favourite", args, {
       listener: function (data) {
-        
+
         var result = JSON.parse(data.result);
 
         if (result.length) {
-          
+
           commit("favourite_data", {
             "result": result,
             "status": false
           });
         } else {
-          
+
           state.nodata_flag = true;
-          
+
         }
 
       }
