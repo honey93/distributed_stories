@@ -1,10 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-
-
-
-
 import {
   contractAddress,
   nebPay,
@@ -12,19 +8,8 @@ import {
   NebPay
 } from './neb_init';
 
-
 Vue.use(Vuex)
 
-
-import * as nebulas from 'nebulas';
-
-var HttpRequest = require("nebulas").HttpRequest;
-var Neb = require("nebulas").Neb;
-var Account = require("nebulas").Account;
-var Transaction = require("nebulas").Transaction;
-var Unit = require("nebulas").Unit;
-var NVM = require("nebulas").NVM;
-var neb = new Neb();
 
 // root state object.
 // each Vuex instance is just a single state tree.
@@ -136,7 +121,7 @@ const actions = {
           if (respObject.code === 0) {
             console.log("tx result: " + resp);
 
-         //   alert(JSON.stringify(respObject));
+            //   alert(JSON.stringify(respObject));
 
             //The transaction is successful 
             //store.dispatch("call");
@@ -169,9 +154,10 @@ const actions = {
           }
         })
         .catch(function (err) {
-         // alert(err);
+          // alert(err);
         });
     }
+
 
 
 
@@ -206,20 +192,19 @@ const actions = {
     var args = "[]";
     nebPay.simulateCall(contractAddress, 0, "favourite", args, {
       listener: function (data) {
-        // commit(all_data,)
+        
         var result = JSON.parse(data.result);
 
         if (result.length) {
-          // alert(data.result);
+          
           commit("favourite_data", {
             "result": result,
             "status": false
           });
         } else {
-          // store.nodata_flag = true;
-          //   alert("no alert");
+          
           state.nodata_flag = true;
-          //commit("favourite_data", {"result":result,"status":true});
+          
         }
 
       }
@@ -231,22 +216,20 @@ const actions = {
     var args = "[]";
     nebPay.simulateCall(contractAddress, 0, "my_stories_data", args, {
       listener: function (data) {
-        // commit(all_data,)
-        //alert(JSON.stringify(data));
+
         var result = JSON.parse(data.result);
-        //alert(result.length);
+
 
         if (result.length) {
-          // alert(data.result);
+
           commit("mystory_data", {
             "result": result,
             "status": false
           });
         } else {
-          // store.nodata_flag = true;
-          //   alert("no alert");
+
           state.nodata_flag_my = true;
-          //commit("mystory_data", {"result":result,"status":true});
+
         }
 
       }
@@ -260,20 +243,11 @@ const actions = {
     var args = "[]";
     nebPay.simulateCall(contractAddress, 0, "account_data", args, {
       listener: function (data) {
-        // commit(all_data,)
-        //alert(JSON.stringify(data));
-        var result = JSON.parse(data.result);
-        //alert(result.length);
 
-        //if (result.length) {
-        // alert(data.result);
+        var result = JSON.parse(data.result);
+
         commit("account_data", result);
-        // } else {
-        // store.nodata_flag = true;
-        //   alert("no alert");
-        // state.nodata_flag_my = true;
-        //commit("mystory_data", {"result":result,"status":true});
-        // }
+
 
       }
     });
