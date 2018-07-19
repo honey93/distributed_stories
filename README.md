@@ -1,6 +1,6 @@
-# nebulas
+# DApp build over Nebulas Platform
 
-> stories
+> Distributed stories
 
 ## Build Setup
 
@@ -11,12 +11,8 @@ $ npm install
 # serve with hot reload at localhost:3000
 $ npm run dev
 
-# build for production and launch server
-$ npm run build
-$ npm start
-
-# generate static project
-$ npm run generate
 ```
+
+To setup the Nebulas browser Extension and creating the account, read [About App] (http://distributedstoriesupdated.s3-website-eu-west-1.amazonaws.com/about)
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
